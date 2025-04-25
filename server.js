@@ -11,9 +11,6 @@ const PORT = process.env.PORT || 3000; // Use port from .env or default to 3000
 const mongoURI = process.env.MONGODB_URI;
 const frontendURL = process.env.FRONTEND_URL || "*"; // Allow all origins if not specified
 
-// --- Remove Mailtrap Nodemailer Setup ---
-// No transporter setup needed here initially
-
 // --- Database Connection ---
 if (!mongoURI) {
   console.error("FATAL ERROR: MONGODB_URI is not defined.");
