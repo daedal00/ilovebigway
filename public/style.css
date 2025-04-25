@@ -1,0 +1,433 @@
+:root {
+  --primary-color: #00a9e0; /* Bright Blue */
+  --secondary-color: #000000; /* Black */
+  --accent-color: #ffffff; /* White */
+  --bg-color: #00a9e0; /* Bright Blue */
+  --text-color: #ffffff; /* White Text */
+  --border-radius: 15px;
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --font-fancy: "Pacifico", cursive;
+  --font-body: "Poppins", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.container {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  overflow: hidden; /* Ensure content fits */
+}
+
+h1 {
+  font-family: var(--font-fancy);
+  color: var(--primary-color);
+  font-size: 2.5em; /* Slightly smaller to prevent cutoff */
+  margin-bottom: 20px;
+  line-height: 1.3; /* Adjust spacing between lines if needed */
+}
+
+h2 {
+  color: var(--secondary-color);
+  margin-bottom: 25px;
+  font-size: 1.8em;
+}
+
+.step {
+  display: none; /* Hide steps by default */
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.step.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+label,
+legend {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+  text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 1em;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(255, 173, 173, 0.5);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+fieldset legend {
+  font-size: 1em;
+  font-weight: 600;
+  padding: 0 10px;
+  color: #555;
+}
+
+fieldset label {
+  font-weight: 400;
+  margin-bottom: 10px;
+  display: flex; /* Align radio button and text */
+  align-items: center;
+  position: relative; /* Needed for absolute positioning of hidden input */
+  cursor: pointer; /* Make the whole label clickable */
+}
+
+/* Style for likelihood descriptions */
+.likelihood-desc {
+  font-size: 0.85em;
+  color: #666;
+  margin-left: 8px; /* Space it from the main text/emoji */
+  font-style: italic;
+}
+
+/* Hide default radio button */
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create custom radio button appearance */
+.custom-radio {
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  position: relative; /* For positioning the inner dot */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Style the inner dot (hidden by default) */
+.custom-radio::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Change background on hover */
+fieldset label:hover .custom-radio {
+  background-color: #ddd;
+}
+
+/* Show the inner dot and change background when radio is checked */
+input[type="radio"]:checked + .custom-radio {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+input[type="radio"]:checked + .custom-radio::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Add focus style for accessibility */
+input[type="radio"]:focus + .custom-radio {
+  box-shadow: 0 0 5px rgba(255, 173, 173, 0.7);
+  border-color: var(--primary-color);
+}
+
+button,
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px; /* Pill shape */
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+  margin: 5px;
+  display: inline-block;
+  text-decoration: none; /* For link styled as button */
+}
+
+button:hover,
+.button:hover {
+  background-color: #ff8a8a; /* Slightly darker pink */
+  transform: translateY(-2px);
+}
+
+button:active,
+.button:active {
+  transform: translateY(0);
+}
+
+.prev-btn {
+  background-color: #ccc;
+}
+
+.prev-btn:hover {
+  background-color: #bbb;
+}
+
+.submit-btn {
+  background-color: var(--secondary-color);
+}
+
+.submit-btn:hover {
+  background-color: #f5c48e; /* Slightly darker orange */
+}
+
+.hidden {
+  display: none;
+}
+
+.error-message {
+  color: #e74c3c; /* Error red */
+  font-size: 0.9em;
+  margin-top: -10px; /* Pull closer to the input */
+  margin-bottom: 15px;
+  min-height: 1.2em; /* Prevent layout shifts */
+  text-align: left;
+}
+
+/* Style for SMS notice */
+.sms-notice {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: -5px; /* Adjust spacing */
+  margin-bottom: 15px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Progress Dots */
+.progress-dots {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  background-color: #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background-color: var(--secondary-color);
+}
+
+/* Image Placeholder Style */
+#image-placeholder {
+  /* width: 150px; */ /* Let content decide width */
+  /* height: 150px; */ /* Let content decide height */
+  background-color: transparent; /* No background needed now */
+  border: none; /* No border needed now */
+  margin: 0 auto 20px auto; /* Center and add space below */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* color: #aaa; */ /* Removed */
+  /* font-size: 0.9em; */ /* Removed */
+  /* border-radius: 10px; */ /* Removed */
+}
+
+/* Style for the actual image inside the placeholder */
+#image-placeholder .header-image {
+  max-width: 100%; /* Ensure image fits container */
+  max-height: 200px; /* Limit height if needed */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Optional: round image corners */
+  box-shadow: var(--box-shadow); /* Optional: add shadow */
+}
+
+#image-placeholder::before {
+  content: ""; /* Remove placeholder text */
+}
+
+/* Style for images within each form step */
+.step-image {
+  display: block; /* Make it a block element */
+  max-width: 80%; /* Limit width */
+  max-height: 150px; /* Limit height */
+  height: auto; /* Maintain aspect ratio */
+  margin: 0 auto 20px auto; /* Center horizontally, add space below */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+/* Basic responsiveness */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+  h1 {
+    font-size: 2em; /* Adjust for smaller screens too */
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+}
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity (backdrop) */
+  /* Add fade-in */
+  animation: fadeInModal 0.3s ease-out;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 30px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 450px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+  animation: slideInModal 0.3s ease-out;
+}
+
+.close-modal-btn {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+.modal-content p {
+  margin-bottom: 25px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+.modal-buttons button {
+  margin: 5px 10px;
+}
+
+/* Style for the image within the modal */
+.modal-image {
+  display: block;
+  max-width: 60%;
+  max-height: 100px; /* Adjust as needed */
+  height: auto;
+  margin: 0 auto 15px auto; /* Center, space below */
+  border-radius: 6px;
+}
+
+/* Modal Animations */
+@keyframes fadeInModal {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes slideInModal {
+  from {
+    margin-top: 10%;
+    opacity: 0;
+  }
+  to {
+    margin-top: 15%;
+    opacity: 1;
+  }
+}

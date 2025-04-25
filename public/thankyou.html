@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Got your response!</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="thank-you-title">Got your response!</h1>
+      <p id="thank-you-message">
+        Thanks! Could you dm me that you filled out the form too please?
+      </p>
+      <a href="/" class="button">Back to Home</a>
+      <!-- Optional: Link to results page -->
+      <!-- <a href="/results.html" class="button">View Results</a> -->
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const reason = params.get("reason");
+      const messageElement = document.getElementById("thank-you-message");
+
+      if (reason === "mild" || reason === "medium") {
+        messageElement.textContent = "Fair enough!";
+        document.getElementById("thank-you-title").textContent =
+          "Acknowledged.";
+      } else if (reason === "submitted") {
+        messageElement.textContent =
+          "Thanks for taking the time to fill out the form";
+      }
+    </script>
+  </body>
+</html>

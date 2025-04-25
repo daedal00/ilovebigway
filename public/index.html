@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bigway</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Step 1: Password -->
+      <div class="step active" id="step-password">
+        <!-- Image Placeholder -->
+        <div id="image-placeholder">
+          <img
+            src="assets/thumb.jpeg"
+            alt="Thumbs Up Dog"
+            class="header-image"
+          />
+        </div>
+        <h1 id="main-title">I made a website</h1>
+
+        <h2>Password Please</h2>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter Password Here"
+        />
+        <button id="password-submit">Submit</button>
+        <p class="error-message" id="password-error"></p>
+      </div>
+
+      <!-- Form Wrapper (Hidden Initially) -->
+      <form id="invite-form" class="hidden">
+        <!-- Step 2: Name -->
+        <div class="step" id="step-name">
+          <img src="assets/uh_oh.jpeg" alt="" class="step-image" />
+          <h2>Name Please!</h2>
+          <label for="name">(just so i can view in the database)</label>
+          <input type="text" id="name" required />
+          <button type="button" class="next-btn">Proceed →</button>
+          <p class="error-message" id="name-error"></p>
+        </div>
+
+        <!-- Step 3: Likelihood -->
+        <div class="step" id="step-likelihood">
+          <img src="assets/think.jpeg" alt="" class="step-image" />
+          <h2>Do you want to get bigway sometime soon?</h2>
+          <fieldset>
+            <legend>Chances of getting bigway soon:</legend>
+            <label
+              ><input
+                type="radio"
+                name="likelihood"
+                value="bigway_hot"
+                required
+              />
+              <span class="custom-radio"></span> Big Way Hot
+              <span class="likelihood-desc">(Very likely)</span></label
+            >
+            <label
+              ><input type="radio" name="likelihood" value="hot" />
+              <span class="custom-radio"></span> Hot
+              <span class="likelihood-desc">(Likely)</span></label
+            >
+            <label
+              ><input type="radio" name="likelihood" value="medium" />
+              <span class="custom-radio"></span> Medium
+              <span class="likelihood-desc">(Unlikely)</span></label
+            >
+            <label
+              ><input type="radio" name="likelihood" value="mild" />
+              <span class="custom-radio"></span> Mild
+              <span class="likelihood-desc">(Very unlikely)</span></label
+            >
+          </fieldset>
+          <button type="button" class="next-btn">Continue</button>
+          <p class="error-message" id="likelihood-error"></p>
+        </div>
+
+        <!-- Step 4: Availability (Conditional) -->
+        <div class="step" id="step-availability">
+          <img src="assets/party.jpeg" alt="" class="step-image" />
+          <h2>Schedule</h2>
+          <label for="availability"
+            >What dates and times are you available?</label
+          >
+          <textarea
+            id="availability"
+            rows="3"
+            placeholder="e.g., 'Monday 12am-4pm'"
+          ></textarea>
+          <button type="button" class="prev-btn">← Back</button>
+          <button type="button" class="next-btn">Next →</button>
+        </div>
+
+        <!-- Step 5: Activities (Conditional) -->
+        <div class="step" id="step-activities">
+          <img src="assets/cheer.jpeg" alt="" class="step-image" />
+          <h2>Any other activites you might want to do? (Optional)</h2>
+          <label for="activities">Afterwards or in general</label>
+          <textarea
+            id="activities"
+            rows="3"
+            placeholder="e.g., 'Go on a walk', 'Climb rocks', 'Grab coffee', 'hike'"
+          ></textarea>
+          <button type="button" class="prev-btn">← Back</button>
+          <button type="button" class="next-btn">Next →</button>
+        </div>
+
+        <!-- Step 6: Contact (Conditional) -->
+        <div class="step" id="step-contact">
+          <img src="assets/rose.jpeg" alt="" class="step-image" />
+          <h2>Phone Number? (Optional)</h2>
+          <label for="contactNumber"
+            >best way to reach me. i don't have notifcations for instagram cause
+            i doomscroll too much rip</label
+          >
+          <input type="tel" id="contactNumber" placeholder="Phone-Number" />
+          <button type="button" class="prev-btn">← Back</button>
+          <button type="submit" class="submit-btn">Submit Response</button>
+          <p class="error-message" id="contact-error"></p>
+        </div>
+        <p class="error-message" id="form-error"></p>
+        <!-- General form error -->
+      </form>
+
+      <div class="progress-dots">
+        <!-- Dots will be added by JS -->
+      </div>
+
+      <!-- Confirmation Modal (Hidden Initially) -->
+      <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+          <img src="assets/tear.jpeg" alt="" class="modal-image" />
+          <span class="close-modal-btn">&times;</span>
+          <h2>Are you sure?</h2>
+          <p id="modal-message">
+            Selecting the two bottom choices means the form will exit out.
+          </p>
+          <div class="modal-buttons">
+            <button id="modal-confirm-btn" class="button">Yes, Continue</button>
+            <button id="modal-cancel-btn" class="button prev-btn">
+              No, Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of container -->
+
+    <script src="script.js"></script>
+  </body>
+</html>
