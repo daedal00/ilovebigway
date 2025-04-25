@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- Configuration ---
   // IMPORTANT: Replace with your ACTUAL Render API URL during deployment
-  const API_BASE_URL = ""; // Use relative path for local testing
-  // const API_BASE_URL = 'https://your-render-app-name.onrender.com'; // Example for deployment
+  const API_BASE_URL = "https://ilovebigway.onrender.com"; // Deployed backend URL
+  // const API_BASE_URL = ''; // Use relative path for local testing
+
+  // --- Function to Wake Up Render ---
+  // ... existing wakeUpRenderBackend function ...
+
+  // --- Call the wake-up function early ---
+  wakeUpRenderBackend();
 
   // --- State & Elements ---
   let currentStepIndex = 0;
