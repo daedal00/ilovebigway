@@ -681,7 +681,7 @@ body {
   align-items: center;
   z-index: 9999; /* Make sure it's on top of everything */
   font-size: 1.2em;
-  color: #333;
+  color: #333; /* Ensure text inside loading overlay is visible */
   text-align: center;
   /* Add a transition for fading out */
   transition: opacity 0.5s ease-out;
@@ -694,7 +694,15 @@ body {
   pointer-events: none;
 }
 
+/* Thank You Page Specific Styles */
+#thank-you-message {
+  color: #333; /* Dark grey text for visibility on white background */
+  margin-top: 20px; /* Add some space above the message */
+  margin-bottom: 30px; /* Add some space below the message */
+  font-size: 1.1em; /* Slightly larger text */
+}
+
 /* Add existing styles below */
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Arial", sans-serif; /* This seems like a leftover default, might conflict with --font-body */
 }
