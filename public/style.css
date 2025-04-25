@@ -316,7 +316,6 @@ button:active,
   max-width: 150px;
   height: auto;
   margin-bottom: 20px;
-  border-radius: 50%; /* Make it circular */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
