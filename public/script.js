@@ -425,12 +425,12 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        let imageUrl = "assets/study.jpeg"; // Default image from thankyou.html
+        let imageUrl = "assets/study.png";
 
         if (reason === "mild" || reason === "medium") {
           messageElement.textContent = "Fair enough!";
           titleElement.textContent = "Acknowledged.";
-          imageUrl = "assets/thumb.jpeg";
+          imageUrl = "assets/thumb.png";
         } else {
           // Default message for full submission (no specific reason needed)
           titleElement.textContent = "Got your response!";
