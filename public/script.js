@@ -15,21 +15,26 @@ document.addEventListener("DOMContentLoaded", () => {
           response.status,
           ")"
         );
+        // Hide the loader ONLY on success
+        if (loadingOverlay) {
+          loadingOverlay.classList.add("hidden");
+          // Optional: Remove the element after transition to clean up DOM
+          // setTimeout(() => { loadingOverlay.remove(); }, 500); // Match CSS transition time
+        }
       } else {
         console.warn(
           "Render backend ping returned non-OK status:",
           response.status
         );
+        // Consider adding error handling for the overlay here
+        // e.g., loadingOverlay.textContent = "Server failed to wake up. Please refresh.";
       }
     } catch (error) {
       console.error("Error pinging Render backend:", error);
+      // Consider adding error handling for the overlay here too
+      // e.g., loadingOverlay.textContent = "Network error. Could not reach server.";
     } finally {
-      // Hide the loader regardless of success or error
-      if (loadingOverlay) {
-        loadingOverlay.classList.add("hidden");
-        // Optional: Remove the element after transition to clean up DOM
-        // setTimeout(() => { loadingOverlay.remove(); }, 500); // Match CSS transition time
-      }
+      // The overlay is no longer hidden here unconditionally
     }
   }
 
