@@ -5,7 +5,33 @@ document.addEventListener("DOMContentLoaded", () => {
   // const API_BASE_URL = ''; // Use relative path for local testing
 
   // --- Function to Wake Up Render ---
-  // ... existing wakeUpRenderBackend function ...
+  async function wakeUpRenderBackend() {
+    console.log("Attempting to wake up Render backend...");
+    try {
+      const response = await fetch(API_BASE_URL, { method: "GET" });
+      if (response.ok) {
+        console.log(
+          "Render backend ping successful (Status:",
+          response.status,
+          ")"
+        );
+      } else {
+        console.warn(
+          "Render backend ping returned non-OK status:",
+          response.status
+        );
+      }
+    } catch (error) {
+      console.error("Error pinging Render backend:", error);
+    } finally {
+      // Hide the loader regardless of success or error
+      if (loadingOverlay) {
+        loadingOverlay.classList.add("hidden");
+        // Optional: Remove the element after transition to clean up DOM
+        // setTimeout(() => { loadingOverlay.remove(); }, 500); // Match CSS transition time
+      }
+    }
+  }
 
   // --- Call the wake-up function early ---
   wakeUpRenderBackend();
@@ -14,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStepIndex = 0;
   let formData = {}; // Store form data across steps
   let storedPassword = ""; // Store the entered password for submission
+  const loadingOverlay = document.getElementById("loading-overlay"); // Get loader
 
   const steps = Array.from(document.querySelectorAll("#invite-form .step"));
   const passwordStep = document.getElementById("step-password");
