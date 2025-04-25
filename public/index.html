@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bigway</title>
+    <link rel="icon" type="image/jpeg" href="assets/bigway.jpg" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,16 +14,58 @@
     />
   </head>
   <body>
+    <!-- Music Player -->
+    <div id="music-player-container">
+      <div id="music-disc" class="music-control" title="Play/Pause Music">
+        <!-- Icon applied via CSS -->
+      </div>
+      <div id="music-info">
+        <span id="song-title">No music playing</span>
+        <div id="music-controls">
+          <button
+            id="prev-song-btn"
+            class="music-control-btn"
+            title="Previous Song"
+          >
+            &#9664;&#9664;
+          </button>
+          <button
+            id="play-pause-btn"
+            class="music-control-btn"
+            title="Play/Pause"
+          >
+            &#9654;
+          </button>
+          <button
+            id="next-song-btn"
+            class="music-control-btn"
+            title="Next Song"
+          >
+            &#9654;&#9654;
+          </button>
+          <input
+            type="range"
+            id="volume-bar"
+            value="1"
+            max="1"
+            step="0.01"
+            title="Volume"
+          />
+        </div>
+      </div>
+    </div>
+    <audio id="background-music">
+      <!-- Note: Removed 'loop' attribute, JS will handle looping -->
+      Your browser does not support the audio element.
+    </audio>
+    <!-- End Music Player -->
+
     <div class="container">
       <!-- Step 1: Password -->
       <div class="step active" id="step-password">
         <!-- Image Placeholder -->
         <div id="image-placeholder">
-          <img
-            src="assets/thumb.jpeg"
-            alt="Thumbs Up Dog"
-            class="header-image"
-          />
+          <img src="assets/tada.jpeg" alt="tada dog" class="header-image" />
         </div>
         <h1 id="main-title">I made a website</h1>
 

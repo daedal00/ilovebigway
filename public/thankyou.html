@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Got your response!</title>
+    <link rel="icon" type="image/jpeg" href="assets/bigway.jpg" />
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +16,18 @@
   <body>
     <div class="container">
       <h1 id="thank-you-title">Got your response!</h1>
+      <img
+        id="thank-you-image"
+        src=""
+        alt="Response graphic"
+        style="
+          max-width: 80%;
+          height: auto;
+          margin: 20px auto;
+          display: block;
+          border-radius: 10px;
+        "
+      />
       <p id="thank-you-message">
         Thanks! Could you dm me that you filled out the form too please?
       </p>
@@ -27,14 +40,27 @@
       const params = new URLSearchParams(window.location.search);
       const reason = params.get("reason");
       const messageElement = document.getElementById("thank-you-message");
+      const titleElement = document.getElementById("thank-you-title");
+      const imageElement = document.getElementById("thank-you-image");
+
+      let imageUrl = "assets/study.jpeg";
 
       if (reason === "mild" || reason === "medium") {
         messageElement.textContent = "Fair enough!";
-        document.getElementById("thank-you-title").textContent =
-          "Acknowledged.";
+        titleElement.textContent = "Acknowledged.";
+        imageUrl = "assets/thumb.jpeg";
       } else if (reason === "submitted") {
         messageElement.textContent =
           "Thanks for taking the time to fill out the form";
+      } else {
+        titleElement.textContent = "Thanks!";
+        messageElement.textContent = "I will get back to you soon:)";
+      }
+
+      if (imageElement) {
+        imageElement.src = imageUrl;
+      } else {
+        console.error("Thank you image element not found!");
       }
     </script>
   </body>

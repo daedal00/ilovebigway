@@ -21,6 +21,7 @@ body {
   margin: 0;
   padding: 20px;
   box-sizing: border-box;
+  padding-top: 70px; /* Adjust this value based on player height */
 }
 
 .container {
@@ -312,28 +313,102 @@ button:active,
 
 /* Style for images within each form step */
 .step-image {
-  display: block; /* Make it a block element */
-  max-width: 80%; /* Limit width */
-  max-height: 150px; /* Limit height */
-  height: auto; /* Maintain aspect ratio */
-  margin: 0 auto 20px auto; /* Center horizontally, add space below */
-  border-radius: 8px; /* Slightly rounded corners */
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 50%; /* Make it circular */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Basic responsiveness */
 @media (max-width: 600px) {
   .container {
-    padding: 20px;
+    padding: 20px 15px; /* Reduced padding further */
+    max-width: 95%; /* Use more screen width */
   }
   h1 {
-    font-size: 2em; /* Adjust for smaller screens too */
+    font-size: 2em; /* Reduced font size */
   }
   h2 {
-    font-size: 1.5em;
+    font-size: 1.5em; /* Reduced font size */
   }
-  button {
+
+  fieldset {
+    padding: 10px;
+  }
+
+  label,
+  legend {
+    font-size: 0.95em;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="tel"],
+  textarea,
+  button,
+  .button {
+    font-size: 0.95em; /* Scale down form elements slightly */
+  }
+
+  button,
+  .button {
     padding: 10px 20px;
-    font-size: 0.9em;
+    width: 100%; /* Make buttons full width */
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box; /* Include padding in width */
+  }
+
+  /* Stack prev/next buttons */
+  .prev-btn,
+  .next-btn {
+    margin-bottom: 10px;
+  }
+
+  .step-image {
+    max-width: 120px; /* Smaller image */
+  }
+
+  .modal-content {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .modal-content h2 {
+    font-size: 1.4em;
+  }
+
+  #music-player-container {
+    padding: 8px;
+    bottom: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px); /* Prevent overflow */
+  }
+
+  #music-info {
+    max-width: calc(100% - 50px); /* Adjust based on disc size */
+  }
+
+  #song-title {
+    font-size: 0.85em;
+  }
+
+  #music-controls {
+    margin-top: 3px;
+  }
+
+  .music-control-btn {
+    padding: 4px 6px;
+    font-size: 0.8em;
+  }
+
+  #volume-bar {
+    max-width: 50px; /* Shorter volume bar */
+  }
+
+  #pointer-group {
+    display: none; /* Hide pointer on small screens */
   }
 }
 
@@ -429,5 +504,166 @@ button:active,
   to {
     margin-top: 15%;
     opacity: 1;
+  }
+}
+
+/* Updated Music Player Styles */
+#music-player-container {
+  /* Default: Hidden on mobile */
+  display: none;
+  /* Keep other properties for potential desktop override, but they won't apply when hidden */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 10px 15px;
+  box-sizing: border-box;
+  z-index: 1001;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#music-disc {
+  width: 35px;
+  height: 35px;
+  margin-right: 15px;
+  background-image: url("/assets/lp-icon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  animation: spin 4s linear infinite;
+  animation-play-state: paused;
+  flex-shrink: 0;
+}
+
+#music-disc.playing {
+  animation-play-state: running;
+}
+
+#music-info {
+  display: flex;
+  align-items: center;
+  color: var(--accent-color);
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+#song-title {
+  font-size: 0.9em;
+  margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 50px;
+}
+
+#music-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.music-control-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  font-size: 1.1em;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+/* Hide volume bar by default (mobile) */
+#volume-bar {
+  display: none;
+}
+
+/* Remove default body padding for mobile */
+body {
+  /* padding-top: 70px; */ /* Removed */
+}
+
+/* --- Tablet/Desktop Styles (≥ 768px) --- */
+@media (min-width: 768px) {
+  /* Override mobile styles for larger screens */
+  #music-player-container {
+    display: flex; /* Make it visible again */
+    /* Restore fixed positioning to top-right */
+    top: 15px;
+    right: 15px;
+    left: auto;
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px 5px 5px;
+    border-radius: 30px;
+    border-bottom: none;
+    justify-content: flex-start;
+  }
+
+  #music-disc {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+
+  #music-info {
+    flex-direction: column; /* Stack title/controls vertically */
+    align-items: flex-start; /* Align to left */
+    margin-left: 10px;
+    flex-grow: 0; /* Don't grow */
+  }
+
+  #song-title {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+    margin-right: 0;
+    min-width: 0;
+    max-width: 150px; /* Limit title width */
+  }
+
+  #music-controls {
+    gap: 8px;
+  }
+
+  .music-control-btn {
+    font-size: 1.2em;
+    padding: 2px 5px;
+  }
+
+  /* Show volume bar on desktop/tablet */
+  #volume-bar {
+    display: inline-block;
+    width: 60px;
+  }
+
+  /* Remove body padding for desktop/tablet */
+  body {
+    padding-top: 0;
+  }
+
+  /* Make sure audio element is not displayed */
+  #background-music {
+    display: none;
+  }
+}
+
+/* Remove specific mobile media queries that are now handled by default or the min-width query */
+/* @media (max-width: 768px) { ... } */ /* Removed */
+/* @media (max-width: 600px) { ... } */ /* Removed */
+
+/* Define the spin animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
