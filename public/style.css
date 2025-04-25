@@ -303,8 +303,8 @@ button:active,
   max-width: 100%; /* Ensure image fits container */
   max-height: 200px; /* Limit height if needed */
   height: auto; /* Maintain aspect ratio */
-  border-radius: 10px; /* Optional: round image corners */
-  box-shadow: var(--box-shadow); /* Optional: add shadow */
+  /* border-radius: 10px; */ /* Optional: round image corners */ /* Removed */
+  /* box-shadow: var(--box-shadow); */ /* Optional: add shadow */ /* Removed */
 }
 
 #image-placeholder::before {
@@ -316,7 +316,8 @@ button:active,
   max-width: 150px;
   height: auto;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* border-radius: 50%; */ /* Removed this line */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */ /* Removed */
 }
 
 /* Basic responsiveness */
@@ -482,7 +483,7 @@ button:active,
   max-height: 100px; /* Adjust as needed */
   height: auto;
   margin: 0 auto 15px auto; /* Center, space below */
-  border-radius: 6px;
+  /* border-radius: 6px; */ /* Removed */
 }
 
 /* Modal Animations */

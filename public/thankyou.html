@@ -20,13 +20,7 @@
         id="thank-you-image"
         src=""
         alt="Response graphic"
-        style="
-          max-width: 80%;
-          height: auto;
-          margin: 20px auto;
-          display: block;
-          border-radius: 10px;
-        "
+        style="max-width: 80%; height: auto; margin: 20px auto; display: block"
       />
       <p id="thank-you-message">
         Thanks! Could you dm me that you filled out the form too please?
@@ -43,12 +37,12 @@
       const titleElement = document.getElementById("thank-you-title");
       const imageElement = document.getElementById("thank-you-image");
 
-      let imageUrl = "assets/study.jpeg";
+      let imageUrl = "assets/study.png";
 
       if (reason === "mild" || reason === "medium") {
         messageElement.textContent = "Fair enough!";
         titleElement.textContent = "Acknowledged.";
-        imageUrl = "assets/thumb.jpeg";
+        imageUrl = "assets/thumb.png";
       } else if (reason === "submitted") {
         messageElement.textContent =
           "Thanks for taking the time to fill out the form";
