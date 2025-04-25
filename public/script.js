@@ -1,45 +1,179 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Domain Check ---
+  const EXPECTED_HOSTNAME = "www.imadethissitetoaskyououtforbigway.com";
+  if (window.location.hostname !== EXPECTED_HOSTNAME) {
+    console.warn(
+      `Current hostname (${window.location.hostname}) does not match expected (${EXPECTED_HOSTNAME}). Hiding content.`
+    );
+    document.body.style.display = "none";
+    // Optionally add a message for the user if accessed via wrong domain
+    // document.body.innerHTML = '<p>Please access this site via the correct domain.</p>';
+    // document.body.style.display = 'block'; // Make message visible if added
+    return; // Stop script execution if domain doesn't match
+  }
+
   // --- Configuration ---
   // IMPORTANT: Replace with your ACTUAL Render API URL during deployment
   const API_BASE_URL = "https://ilovebigway.onrender.com"; // Deployed backend URL
   // const API_BASE_URL = ''; // Use relative path for local testing
 
-  // --- Function to Wake Up Render ---
-  async function wakeUpRenderBackend() {
-    console.log("Attempting to wake up Render backend...");
-    try {
-      const response = await fetch(API_BASE_URL, { method: "GET" });
-      if (response.ok) {
-        console.log(
-          "Render backend ping successful (Status:",
-          response.status,
-          ")"
-        );
-        // Hide the loader ONLY on success
-        if (loadingOverlay) {
-          loadingOverlay.classList.add("hidden");
-          // Optional: Remove the element after transition to clean up DOM
-          // setTimeout(() => { loadingOverlay.remove(); }, 500); // Match CSS transition time
+  // --- Server Status Elements ---
+  const serverStatusIndicator = document.getElementById(
+    "server-status-indicator"
+  );
+  const serverStatusText = document.getElementById("server-status-text");
+  const serverStatusDot = document.getElementById("server-status-dot");
+  const wakeServerBtn = document.getElementById("wake-server-btn");
+
+  // --- Helper to Update Server Status UI ---
+  function updateServerStatus(status, message, isPolling = false) {
+    if (!serverStatusIndicator) return;
+
+    serverStatusDot.className = "status-dot"; // Reset classes
+    switch (status) {
+      case "online":
+        serverStatusText.textContent = message || "Server Status: Online";
+        serverStatusDot.classList.add("status-online");
+        wakeServerBtn.classList.add("hidden");
+        wakeServerBtn.disabled = false; // Re-enable button if it was disabled
+        break;
+      case "offline":
+        serverStatusText.textContent = message || "Server Status: Offline";
+        serverStatusDot.classList.add("status-offline");
+        // Only show button if not currently in the middle of polling wake-up
+        if (!isPolling) {
+          wakeServerBtn.classList.remove("hidden");
+          wakeServerBtn.disabled = false; // Ensure button is enabled
+        } else {
+          // Keep button hidden/disabled if polling failed
+          wakeServerBtn.classList.add("hidden");
+          wakeServerBtn.disabled = true;
         }
-      } else {
-        console.warn(
-          "Render backend ping returned non-OK status:",
-          response.status
-        );
-        // Consider adding error handling for the overlay here
-        // e.g., loadingOverlay.textContent = "Server failed to wake up. Please refresh.";
-      }
-    } catch (error) {
-      console.error("Error pinging Render backend:", error);
-      // Consider adding error handling for the overlay here too
-      // e.g., loadingOverlay.textContent = "Network error. Could not reach server.";
-    } finally {
-      // The overlay is no longer hidden here unconditionally
+        break;
+      case "checking":
+      default:
+        serverStatusText.textContent = message || "Server Status: Checking...";
+        serverStatusDot.classList.add("status-checking");
+        wakeServerBtn.classList.add("hidden"); // Hide button while checking/waking
+        // Optionally disable button while checking
+        if (isPolling) {
+          wakeServerBtn.disabled = true;
+        } else {
+          wakeServerBtn.disabled = false;
+        }
+        break;
     }
   }
 
-  // --- Call the wake-up function early ---
-  wakeUpRenderBackend();
+  // --- Polling Variables ---
+  let pollingIntervalId = null;
+  let pollAttempts = 0;
+  const MAX_POLL_ATTEMPTS = 10; // Try 10 times (e.g., 10 * 3s = 30 seconds)
+  const POLLING_INTERVAL_MS = 3000; // Check every 3 seconds
+
+  // --- Function to Poll Server Status (Used After Wake-Up Attempt) ---
+  async function pollServerStatus() {
+    pollAttempts++;
+    console.log(
+      `Polling server status (Attempt ${pollAttempts}/${MAX_POLL_ATTEMPTS})...`
+    );
+    try {
+      const response = await fetch(API_BASE_URL, { method: "GET" });
+      if (response.ok) {
+        console.log("Polling successful: Server is online.");
+        updateServerStatus("online");
+        clearInterval(pollingIntervalId); // Stop polling on success
+        pollingIntervalId = null;
+      } else {
+        console.warn(
+          `Polling attempt ${pollAttempts}: Server responded non-OK (${response.status})`
+        );
+        if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+          console.error(
+            "Max polling attempts reached. Server failed to wake up."
+          );
+          // Update status to show failure, keep button hidden/disabled
+          updateServerStatus(
+            "offline",
+            "Server failed to respond. Refresh?",
+            true
+          );
+          clearInterval(pollingIntervalId);
+          pollingIntervalId = null;
+        }
+        // Otherwise, continue polling (do nothing here, interval continues)
+      }
+    } catch (error) {
+      console.error(`Polling attempt ${pollAttempts}: Network error:`, error);
+      if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+        console.error("Max polling attempts reached after network errors.");
+        // Update status to show failure, keep button hidden/disabled
+        updateServerStatus(
+          "offline",
+          "Connection error during wake-up. Refresh?",
+          true
+        );
+        clearInterval(pollingIntervalId);
+        pollingIntervalId = null;
+      }
+      // Otherwise, continue polling (do nothing here, interval continues)
+    }
+  }
+
+  // --- Function to Manually Wake Up Render (Triggered by Button) ---
+  async function wakeUpRenderBackend() {
+    // Prevent starting multiple polling intervals
+    if (pollingIntervalId) {
+      console.log("Polling already in progress.");
+      return;
+    }
+
+    console.log("Manual wake-up request initiated...");
+    pollAttempts = 0; // Reset poll counter
+    updateServerStatus("checking", "Server Status: Waking up...", true); // Set checking state, disable button
+
+    // Start polling immediately after initiating wake-up
+    pollingIntervalId = setInterval(pollServerStatus, POLLING_INTERVAL_MS);
+
+    // Optional: Send one initial request immediately to kickstart the server,
+    // but the main status update relies on the polling.
+    fetch(API_BASE_URL, { method: "GET" }).catch((err) => {
+      console.warn(
+        "Initial wake-up ping failed (error ignored, polling handles status):",
+        err
+      );
+    });
+  }
+
+  // --- Function to Check Initial Server Status on Load ---
+  async function checkServerStatusInitial() {
+    console.log("Initial server status check...");
+    updateServerStatus("checking"); // Set initial state
+    try {
+      // Use a shorter timeout for the initial check maybe?
+      const response = await fetch(API_BASE_URL, { method: "GET" });
+      if (response.ok) {
+        console.log("Initial check: Server is online.");
+        updateServerStatus("online");
+      } else {
+        console.warn(
+          `Initial check: Server offline or non-OK status: ${response.status}`
+        );
+        updateServerStatus("offline");
+      }
+    } catch (error) {
+      console.error("Initial check: Error pinging server:", error);
+      updateServerStatus("offline");
+    }
+  }
+
+  // --- Call the initial status check function ---
+  checkServerStatusInitial();
+
+  // --- Add Event Listener for Wake Up Button ---
+  if (wakeServerBtn) {
+    wakeServerBtn.addEventListener("click", wakeUpRenderBackend);
+  }
 
   // --- State & Elements ---
   let currentStepIndex = 0;

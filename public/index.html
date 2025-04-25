@@ -14,10 +14,13 @@
     />
   </head>
   <body>
-    <div id="loading-overlay" class="loading-overlay">
-      <p>Waking up the server... Please wait a moment.</p>
-      <!-- Optional: You can add a CSS spinner animation here later -->
+    <!-- Server Status Indicator -->
+    <div id="server-status-indicator">
+      <span id="server-status-text">Server Status: Checking...</span>
+      <span id="server-status-dot" class="status-checking"></span>
+      <button id="wake-server-btn" class="hidden">Wake Up Server</button>
     </div>
+
     <!-- Music Player -->
     <div id="music-player-container">
       <div id="music-disc" class="music-control" title="Play/Pause Music">

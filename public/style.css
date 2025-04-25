@@ -668,41 +668,83 @@ body {
   }
 }
 
-/* Loading Overlay Styles */
-.loading-overlay {
+/* Server Status Indicator Styles */
+#server-status-indicator {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 1002; /* Above music player */
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 9999; /* Make sure it's on top of everything */
-  font-size: 1.2em;
-  color: #333; /* Ensure text inside loading overlay is visible */
-  text-align: center;
-  /* Add a transition for fading out */
-  transition: opacity 0.5s ease-out;
-  opacity: 1;
+  font-size: 0.9em;
 }
 
-.loading-overlay.hidden {
-  opacity: 0;
-  /* Use pointer-events: none after transition to allow clicks underneath */
-  pointer-events: none;
+#server-status-text {
+  margin-right: 8px;
 }
 
-/* Thank You Page Specific Styles */
-#thank-you-message {
-  color: #333; /* Dark grey text for visibility on white background */
-  margin-top: 20px; /* Add some space above the message */
-  margin-bottom: 30px; /* Add some space below the message */
-  font-size: 1.1em; /* Slightly larger text */
+#server-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  background-color: grey; /* Default/Checking */
 }
 
-/* Add existing styles below */
+#server-status-dot.status-online {
+  background-color: #2ecc71; /* Green */
+}
+
+#server-status-dot.status-offline {
+  background-color: #e74c3c; /* Red */
+}
+
+#server-status-dot.status-checking {
+  background-color: #f39c12; /* Orange */
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+#wake-server-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 5px; /* Add some space */
+  transition: background-color 0.3s;
+}
+
+#wake-server-btn:hover {
+  background-color: #ff8a8a;
+}
+
+#wake-server-btn.hidden {
+  display: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Adjust body padding slightly if needed due to fixed indicator */
 body {
-  font-family: "Arial", sans-serif; /* This seems like a leftover default, might conflict with --font-body */
+  /* padding-top: 70px; Consider if indicator overlaps important content */
 }
