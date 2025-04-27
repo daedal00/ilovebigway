@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- Domain Check ---
-  // const EXPECTED_HOSTNAME = "www.imadethissitetoaskyououtforbigway.com";
-  // if (window.location.hostname !== EXPECTED_HOSTNAME) {
-  //   console.warn(
-  //     `Current hostname (${window.location.hostname}) does not match expected (${EXPECTED_HOSTNAME}). Hiding content.`
-  //   );
-  //   document.body.style.display = "none";
-  //   // Optionally add a message for the user if accessed via wrong domain
-  //   // document.body.innerHTML = '<p>Please access this site via the correct domain.</p>';
-  //   // document.body.style.display = 'block'; // Make message visible if added
-  //   return; // Stop script execution if domain doesn't match
-  // }
+  const EXPECTED_HOSTNAME = "www.imadethissitetoaskyououtforbigway.com";
+  if (window.location.hostname !== EXPECTED_HOSTNAME) {
+    console.warn(
+      `Current hostname (${window.location.hostname}) does not match expected (${EXPECTED_HOSTNAME}). Hiding content.`
+    );
+    document.body.style.display = "none";
+    // Optionally add a message for the user if accessed via wrong domain
+    // document.body.innerHTML = '<p>Please access this site via the correct domain.</p>';
+    // document.body.style.display = 'block'; // Make message visible if added
+    return; // Stop script execution if domain doesn't match
+  }
 
   // --- Configuration ---
   // IMPORTANT: Replace with your ACTUAL Render API URL during deployment
