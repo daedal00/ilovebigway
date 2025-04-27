@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- Domain Check ---
-  const EXPECTED_HOSTNAME = "www.imadethissitetoaskyououtforbigway.com";
-  if (window.location.hostname !== EXPECTED_HOSTNAME) {
-    console.warn(
-      `Current hostname (${window.location.hostname}) does not match expected (${EXPECTED_HOSTNAME}). Hiding content.`
-    );
-    document.body.style.display = "none";
-    // Optionally add a message for the user if accessed via wrong domain
-    // document.body.innerHTML = '<p>Please access this site via the correct domain.</p>';
-    // document.body.style.display = 'block'; // Make message visible if added
-    return; // Stop script execution if domain doesn't match
-  }
+  // const EXPECTED_HOSTNAME = "www.imadethissitetoaskyououtforbigway.com";
+  // if (window.location.hostname !== EXPECTED_HOSTNAME) {
+  //   console.warn(
+  //     `Current hostname (${window.location.hostname}) does not match expected (${EXPECTED_HOSTNAME}). Hiding content.`
+  //   );
+  //   document.body.style.display = "none";
+  //   // Optionally add a message for the user if accessed via wrong domain
+  //   // document.body.innerHTML = '<p>Please access this site via the correct domain.</p>';
+  //   // document.body.style.display = 'block'; // Make message visible if added
+  //   return; // Stop script execution if domain doesn't match
+  // }
 
   // --- Configuration ---
   // IMPORTANT: Replace with your ACTUAL Render API URL during deployment
@@ -218,17 +218,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const playPauseBtn = document.getElementById("play-pause-btn");
   const nextSongBtn = document.getElementById("next-song-btn");
   const volumeBar = document.getElementById("volume-bar");
+  const musicPlayerGif = document.getElementById("music-player-gif"); // Get reference to the GIF
 
-  // Music Playlist & Titles
-  const playlist = ["broken.mp3", "life.mp3", "rains.mp3", "starry.mp3"];
-  const songTitles = {
-    "broken.mp3": "broken melodies",
-    "life.mp3": "life is still going on",
-    "rains.mp3": "rains in heaven",
-    "starry.mp3": "starry night",
-  };
-  let currentSongIndex = 0;
-  let isMusicSetup = false; // Flag to load first song only once
+  // --- Music Segments (Timestamps in seconds) ---
+  const musicSegments = [
+    { title: "The City (Evening) ~ City Folk", start: 0 },
+    { title: "1 AM ~ City Folk", start: 130 }, // 2:10
+    { title: "6 AM ~ New Horizons", start: 257 }, // 4:17
+    { title: "K.K. Slider Intro ~ GameCube", start: 404 }, // 6:44
+    { title: "7 AM ~ New Leaf", start: 501 }, // 8:21
+    { title: "11 AM ~ New Leaf", start: 606 }, // 10:06
+    { title: "10 PM ~ New Horizons", start: 606 + 1 * 60 + 37 }, // 11:43
+    { title: "5 PM ~ GameCube", start: 849 }, // 14:09
+    { title: "8 PM ~ New Leaf", start: 993 }, // 16:33
+    { title: "Tom Nook's Announcement ~ New Horizons", start: 1089 }, // 18:09
+    { title: "11 PM ~ New Leaf", start: 1189 }, // 19:49
+    { title: "Exhibit Room ~ New Leaf", start: 1324 }, // 22:04
+    { title: "2 AM ~ City Folk", start: 1399 }, // 23:19
+    { title: "5 AM ~ GameCube", start: 1550 }, // 25:50
+    { title: "Get Ready for Your Flight! ~ New Horizons", start: 1746 }, // 29:06
+    { title: "8 AM ~ New Leaf", start: 1870 }, // 31:10
+    { title: "4 PM ~ GameCube", start: 1966 }, // 32:46
+    { title: "Able Sisters ~ New Horizons", start: 2106 }, // 35:06
+    { title: "5 PM ~ New Leaf", start: 2220 }, // 37:00
+    { title: "7 PM ~ GameCube", start: 2372 }, // 39:32
+    { title: "10 PM ~ New Leaf", start: 2508 }, // 41:48
+    { title: "1 AM ~ New Horizons", start: 2593 }, // 43:13
+    { title: "1 AM ~ New Leaf", start: 2782 }, // 46:22
+    { title: "2 AM ~ City Folk", start: 2909 }, // 48:29
+    { title: "6 AM ~ City Folk", start: 3060 }, // 51:00
+    { title: "11 AM ~ New Horizons", start: 3150 }, // 52:30
+    { title: "Resident Services ~ New Horizons", start: 3329 }, // 55:29
+    { title: "2 PM ~ New Leaf", start: 3480 }, // 58:00
+    { title: "Nook's Cranny ~ New Horizons", start: 3583 }, // 59:43
+    { title: "8 PM ~ City Folk", start: 3726 }, // 1:02:06
+    { title: "Museum (Entrance) ~ City Folk", start: 3886 }, // 1:04:46
+    { title: "9 PM ~ GameCube", start: 4011 }, // 1:06:51
+    { title: "The Roost Cafe ~ New Leaf", start: 4175 }, // 1:09:35
+  ];
+  let currentSegmentIndex = 0;
+  let isMusicSetup = false; // Flag for first play interaction
 
   // --- Helper Functions ---
   function showStep(index) {
@@ -319,152 +348,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300);
   }
 
-  function loadAndPlaySong(index) {
-    if (index < 0 || index >= playlist.length) {
-      console.error("Invalid song index:", index);
+  // --- New Music Logic ---
+  function playSegment(index, resume = false) {
+    if (index < 0 || index >= musicSegments.length) {
+      console.error("Invalid segment index:", index);
       return;
     }
-    const songName = playlist[index];
-    backgroundMusic.src = `/assets/music/${songName}`;
-    // Use the mapping for the title
-    songTitleElement.textContent =
-      songTitles[songName] || songName.replace(/\.mp3$/i, ""); // Fallback to filename if mapping missing
+    currentSegmentIndex = index; // Ensure index is updated
+    const segment = musicSegments[index];
+    songTitleElement.textContent = segment.title;
+
+    if (!resume) {
+      backgroundMusic.currentTime = segment.start;
+    }
 
     backgroundMusic
       .play()
       .then(() => {
         musicDisc.classList.add("playing");
         playPauseBtn.innerHTML = "&#10074;&#10074;"; // Pause symbol
+        if (musicPlayerGif) musicPlayerGif.src = "assets/dance.gif"; // Play GIF
+        isMusicSetup = true; // Mark setup as complete on successful play
       })
       .catch((error) => {
-        console.warn("Audio play failed:", error);
-        songTitleElement.textContent = "Playback error";
-        musicDisc.classList.remove("playing");
-        playPauseBtn.innerHTML = "&#9654;"; // Play symbol
+        // Ignore errors often caused by rapid seeking/playing
+        if (error.name !== "AbortError") {
+          console.warn("Audio play failed:", error);
+          songTitleElement.textContent = "Playback error";
+          musicDisc.classList.remove("playing");
+          playPauseBtn.innerHTML = "&#9654;"; // Play symbol
+          if (musicPlayerGif) musicPlayerGif.src = "assets/static.png"; // Show static on error
+        }
       });
   }
 
   function togglePlayPause() {
     if (!isMusicSetup) {
-      // First interaction: load and play the initial song
-      loadAndPlaySong(currentSongIndex);
-      isMusicSetup = true;
-      // loadAndPlaySong already sets pause symbol and playing class
+      // First interaction: play the initial segment
+      playSegment(currentSegmentIndex);
     } else if (backgroundMusic.paused) {
-      // Resume playback
-      backgroundMusic
-        .play()
-        .then(() => {
-          musicDisc.classList.add("playing");
-          playPauseBtn.innerHTML = "&#10074;&#10074;"; // Pause symbol
-          // Update title in case it showed an error before
-          const currentSongName = playlist[currentSongIndex];
-          songTitleElement.textContent =
-            songTitles[currentSongName] ||
-            currentSongName.replace(/\.mp3$/i, "");
-        })
-        .catch((error) => {
-          console.warn("Audio resume failed:", error);
-          songTitleElement.textContent = "Playback error";
-          musicDisc.classList.remove("playing");
-          playPauseBtn.innerHTML = "&#9654;"; // Play symbol
-        });
+      // Resume playback (don't reset time)
+      playSegment(currentSegmentIndex, true); // Pass resume flag
+      // playSegment will set the src to dance.gif on successful play
     } else {
       // Pause playback
       backgroundMusic.pause();
       musicDisc.classList.remove("playing");
       playPauseBtn.innerHTML = "&#9654;"; // Play symbol
+      if (musicPlayerGif) musicPlayerGif.src = "assets/static.png"; // Show static on pause
     }
   }
 
-  // Function to load and display thank you content dynamically
-  async function showThankYouContent(reason) {
-    try {
-      const response = await fetch("/thankyou.html");
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch thankyou.html: ${response.statusText}`
-        );
-      }
-      const thankYouHtml = await response.text();
-
-      // Parse the fetched HTML
-      const parser = new DOMParser();
-      const thankYouDoc = parser.parseFromString(thankYouHtml, "text/html");
-
-      // Extract the content we want (e.g., the container div)
-      const thankYouContent = thankYouDoc.querySelector(".container"); // Assuming structure
-      const mainContainer = document.querySelector(".container");
-      const formWrapper = document.getElementById("invite-form"); // Get the form
-      const passwordWrapper = document.getElementById("step-password"); // Get password step
-      const pointerGroup = document.getElementById("pointer-group"); // Get pointer
-
-      if (mainContainer && thankYouContent) {
-        // Hide original form/password elements completely
-        if (formWrapper) formWrapper.style.display = "none";
-        if (passwordWrapper) passwordWrapper.style.display = "none";
-        if (progressDotsContainer) progressDotsContainer.style.display = "none";
-        if (pointerGroup) pointerGroup.style.display = "none";
-
-        // Replace the content
-        mainContainer.innerHTML = thankYouContent.innerHTML;
-        mainContainer.classList.add("thank-you-state"); // Add a class for potential styling
-
-        // Re-run the script logic from thankyou.html (adapted)
-        const messageElement =
-          mainContainer.querySelector("#thank-you-message");
-        const titleElement = mainContainer.querySelector("#thank-you-title");
-        const imageElement = mainContainer.querySelector("#thank-you-image");
-
-        if (!messageElement || !titleElement || !imageElement) {
-          console.error(
-            "Could not find all thank you elements after injection."
-          );
-          mainContainer.innerHTML =
-            "<h1>Thanks!</h1><p>Your submission was received.</p><a href='/'>Back Home</a>"; // Fallback
-          return;
-        }
-
-        let imageUrl = "assets/study.png";
-
-        if (reason === "mild" || reason === "medium") {
-          messageElement.textContent = "Fair enough!";
-          titleElement.textContent = "Acknowledged.";
-          imageUrl = "assets/thumb.png";
-        } else {
-          // Default message for full submission (no specific reason needed)
-          titleElement.textContent = "Got your response!";
-          messageElement.textContent = "I will get back to you soon:)";
-        }
-
-        imageElement.src = imageUrl;
-        imageElement.style.display = "block"; // Ensure image is visible
-
-        // --- Attempt to resume music ---
-        if (backgroundMusic && !backgroundMusic.paused) {
-          // If music was playing, try to ensure it continues
-          // A short delay might help if the pause is due to intensive DOM manipulation
-          setTimeout(() => {
-            backgroundMusic
-              .play()
-              .catch((e) =>
-                console.warn("Could not resume music after thank you:", e)
-              );
-          }, 50); // Small delay
-        } else if (backgroundMusic && backgroundMusic.paused && isMusicSetup) {
-          // If music was paused but had been set up, leave it paused
-          console.log("Music was paused, leaving it paused.");
-        }
-      } else {
-        console.error("Could not find main container or thank you content.");
-        // Fallback: redirect if injection fails
-        window.location.href = `/thankyou.html?reason=${reason || "submitted"}`;
-      }
-    } catch (error) {
-      console.error("Error loading thank you content:", error);
-      // Fallback: redirect on error
-      window.location.href = `/thankyou.html?reason=${reason || "submitted"}`;
+  function nextSegment() {
+    let nextIndex = currentSegmentIndex + 1;
+    if (nextIndex >= musicSegments.length) {
+      nextIndex = 0; // Loop back to the beginning
     }
+    playSegment(nextIndex);
+  }
+
+  function prevSegment() {
+    let prevIndex = currentSegmentIndex - 1;
+    if (prevIndex < 0) {
+      prevIndex = musicSegments.length - 1; // Wrap around to the end
+    }
+    playSegment(prevIndex);
   }
 
   // --- Event Listeners ---
@@ -719,6 +667,9 @@ document.addEventListener("DOMContentLoaded", () => {
     nextSongBtn &&
     volumeBar
   ) {
+    // Set initial title
+    songTitleElement.textContent = musicSegments[currentSegmentIndex].title;
+
     // Play/Pause (Disc Click)
     musicDisc.addEventListener("click", togglePlayPause);
 
@@ -726,32 +677,33 @@ document.addEventListener("DOMContentLoaded", () => {
     playPauseBtn.addEventListener("click", togglePlayPause);
 
     // Previous Button
-    prevSongBtn.addEventListener("click", () => {
-      currentSongIndex--;
-      if (currentSongIndex < 0) {
-        currentSongIndex = playlist.length - 1; // Wrap around to the end
-      }
-      loadAndPlaySong(currentSongIndex);
-      playPauseBtn.innerHTML = "&#10074;&#10074;"; // Pause symbol
-    });
+    prevSongBtn.addEventListener("click", prevSegment);
 
     // Next Button
-    nextSongBtn.addEventListener("click", () => {
-      currentSongIndex++;
-      if (currentSongIndex >= playlist.length) {
-        currentSongIndex = 0; // Loop back to the beginning
-      }
-      loadAndPlaySong(currentSongIndex);
-      playPauseBtn.innerHTML = "&#10074;&#10074;"; // Pause symbol
-    });
+    nextSongBtn.addEventListener("click", nextSegment);
 
-    // Next Song on End
-    backgroundMusic.addEventListener("ended", () => {
-      currentSongIndex++;
-      if (currentSongIndex >= playlist.length) {
-        currentSongIndex = 0; // Loop back to the beginning
+    // Auto-advance to next segment
+    backgroundMusic.addEventListener("timeupdate", () => {
+      const currentSegment = musicSegments[currentSegmentIndex];
+      const nextSegmentIndex = currentSegmentIndex + 1;
+      // Determine the end time for the current segment
+      // If it's the last segment, let it play to the audio's end
+      const endTime =
+        nextSegmentIndex < musicSegments.length
+          ? musicSegments[nextSegmentIndex].start
+          : backgroundMusic.duration; // Use actual duration for the last segment
+
+      // Check if current time is past the start of the next segment (or near the end of the file)
+      // Add a small buffer (e.g., 0.5 seconds) to prevent skipping too early
+      if (
+        isMusicSetup && // Only advance if music has been started
+        !backgroundMusic.paused && // Only advance if playing
+        endTime && // Ensure endTime is valid
+        backgroundMusic.currentTime >= endTime - 0.5 // Check against end time
+      ) {
+        console.log(`Segment '${currentSegment.title}' ended, advancing.`);
+        nextSegment(); // This handles looping back to 0
       }
-      loadAndPlaySong(currentSongIndex);
     });
 
     // Volume Control
@@ -769,6 +721,7 @@ document.addEventListener("DOMContentLoaded", () => {
           backgroundMusic.pause();
           musicDisc.classList.remove("playing");
           playPauseBtn.innerHTML = "&#9654;"; // Play symbol
+          if (musicPlayerGif) musicPlayerGif.src = "assets/static.png"; // Show static on modal pause
         }
       });
     }
@@ -780,4 +733,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (progressDotsContainer) progressDotsContainer.style.display = "none";
   // Show only the password step on load (already handled by 'active' class, but good practice)
   // showStep(currentStepIndex); // No, wait for password
+
+  // Set initial title even before play
+  if (songTitleElement && musicSegments.length > 0) {
+    songTitleElement.textContent = musicSegments[0].title;
+  }
+  // Set initial GIF state to static
+  if (musicPlayerGif) {
+    musicPlayerGif.src = "assets/static.png";
+  }
 });

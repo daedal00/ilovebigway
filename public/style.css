@@ -1,9 +1,9 @@
 :root {
-  --primary-color: #00a9e0; /* Bright Blue */
-  --secondary-color: #000000; /* Black */
-  --accent-color: #ffffff; /* White */
-  --bg-color: #00a9e0; /* Bright Blue */
-  --text-color: #ffffff; /* White Text */
+  --primary-color: #79c267; /* Animal Crossing Green */
+  --secondary-color: #f5f5dc; /* Beige/Cream */
+  --accent-color: #8b4513; /* Wood Brown */
+  --bg-color: #f5f5dc; /* Beige/Cream Background */
+  --text-color: #5a3a2e; /* Dark Brown Text */
   --border-radius: 15px;
   --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   --font-fancy: "Pacifico", cursive;
@@ -44,7 +44,7 @@ h1 {
 }
 
 h2 {
-  color: var(--secondary-color);
+  color: var(--accent-color);
   margin-bottom: 25px;
   font-size: 1.8em;
 }
@@ -98,7 +98,7 @@ input[type="tel"]:focus,
 textarea:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 5px rgba(255, 173, 173, 0.5);
+  box-shadow: 0 0 5px rgba(121, 194, 103, 0.5);
 }
 
 textarea {
@@ -192,7 +192,7 @@ input[type="radio"]:checked + .custom-radio::after {
 
 /* Add focus style for accessibility */
 input[type="radio"]:focus + .custom-radio {
-  box-shadow: 0 0 5px rgba(255, 173, 173, 0.7);
+  box-shadow: 0 0 5px rgba(121, 194, 103, 0.7);
   border-color: var(--primary-color);
 }
 
@@ -214,7 +214,7 @@ button,
 
 button:hover,
 .button:hover {
-  background-color: #ff8a8a; /* Slightly darker pink */
+  background-color: #68a85a; /* Slightly darker green */
   transform: translateY(-2px);
 }
 
@@ -224,19 +224,19 @@ button:active,
 }
 
 .prev-btn {
-  background-color: #ccc;
+  background-color: #a0a0a0; /* Grey for back button */
 }
 
 .prev-btn:hover {
-  background-color: #bbb;
+  background-color: #888888;
 }
 
 .submit-btn {
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color); /* Brown for submit */
 }
 
 .submit-btn:hover {
-  background-color: #f5c48e; /* Slightly darker orange */
+  background-color: #7a3d10; /* Darker brown */
 }
 
 .hidden {
@@ -526,23 +526,15 @@ button:active,
 }
 
 #music-disc {
-  width: 35px;
-  height: 35px;
-  margin-right: 15px;
-  background-image: url("/assets/lp-icon.png");
+  width: 50px;
+  height: 50px;
+  /* background-image: url("assets/lp-disc.png"); Removed */
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.3s ease;
-  animation: spin 4s linear infinite;
-  animation-play-state: paused;
-  flex-shrink: 0;
-}
-
-#music-disc.playing {
-  animation-play-state: running;
+  /* Removed animation */
 }
 
 #music-info {
@@ -555,7 +547,8 @@ button:active,
 
 #song-title {
   font-size: 0.9em;
-  margin-right: 20px;
+  margin-bottom: 5px;
+  color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -658,16 +651,6 @@ body {
 /* @media (max-width: 768px) { ... } */ /* Removed */
 /* @media (max-width: 600px) { ... } */ /* Removed */
 
-/* Define the spin animation */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Server Status Indicator Styles */
 #server-status-indicator {
   position: fixed;
@@ -747,4 +730,12 @@ body {
 /* Adjust body padding slightly if needed due to fixed indicator */
 body {
   /* padding-top: 70px; Consider if indicator overlaps important content */
+}
+
+/* Style for the added GIF */
+#music-player-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Changed from 'cover' to 'contain' */
+  border-radius: 50%; /* Make it round like the container */
 }
