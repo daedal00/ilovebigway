@@ -260,6 +260,33 @@ document.addEventListener("DOMContentLoaded", () => {
   let isMusicSetup = false; // Flag for first play interaction
 
   // --- Helper Functions ---
+  // Track form submission state
+  let isSubmitting = false;
+
+  function showThankYouContent(reason = null) {
+    // Prevent multiple redirects
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    // Disable form controls
+    const allInputs = document.querySelectorAll("input, textarea, button");
+    allInputs.forEach((el) => (el.disabled = true));
+
+    // Show loading state if needed
+    if (loadingOverlay) loadingOverlay.style.display = "block";
+
+    // Construct the URL with the reason parameter
+    const redirectUrl = reason
+      ? `/thankyou.html?reason=${encodeURIComponent(reason)}`
+      : "/thankyou.html?reason=submitted";
+
+    // Use a short timeout to ensure UI updates are visible
+    setTimeout(() => {
+      // Redirect to thank you page
+      window.location.href = redirectUrl;
+    }, 100);
+  }
+
   function showStep(index) {
     steps.forEach((step, i) => {
       step.classList.toggle("active", i === index);
